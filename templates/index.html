@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Telegram News</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="shell">
+        <header class="topbar">
+            <a class="brand" href="/" aria-label="Telegram News, главная">
+                <span class="brand-mark">tn</span>
+                <span>Telegram News</span>
+            </a>
+            <div class="live-status"><span></span> Автообновление включено</div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-copy">
+                    <p class="eyebrow">Официальные источники · 24/7</p>
+                    <h1>Что нового<br><em>в Telegram</em></h1>
+                    <p class="hero-text">Точная лента обновлений из официального блога Telegram и канала Павла Дурова.</p>
+                </div>
+                <div class="signal" aria-hidden="true"><span></span><span></span><span></span><b>LIVE<br>FEED</b></div>
+            </section>
+
+            <section class="feed-header">
+                <div><p class="section-kicker">Последние сигналы</p><h2>Свежие публикации</h2></div>
+                <button class="refresh-button" id="refreshButton" type="button"><span>↻</span> Обновить</button>
+            </section>
+
+            <section class="news-grid" id="newsGrid">
+                {% for item in news %}
+                <article class="news-card">
+                    <div class="card-top"><span class="source-tag">{{ item.source_label }}</span><span class="card-index">{{ "%02d"|format(loop.index) }}</span></div>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.summary[:220] }}{% if item.summary|length > 220 %}...{% endif %}</p>
+                    <div class="card-bottom"><time>{{ item.published[:10] if item.published else "Недавно" }}</time><a href="{{ item.url }}" target="_blank" rel="noreferrer">Читать источник <span>↗</span></a></div>
+                </article>
+                {% else %}
+                <div class="empty-state">Новости появятся после первого обновления источников.</div>
+                {% endfor %}
+            </section>
+        </main>
+
+        <footer><span>Источники проверены</span><span>Telegram News / 2026</span></footer>
+    </div>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
